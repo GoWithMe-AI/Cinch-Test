@@ -1,0 +1,81 @@
+# Root node_modules
+node_modules/
+
+# Laravel
+**/vendor/
+**/node_modules/
+**/public/hot
+**/public/storage
+**/storage/*.key
+**/.env
+**/.env.backup
+**/.env.production
+**/.phpunit.result.cache
+**/.phpunit.cache
+**/Homestead.json
+**/Homestead.yaml
+**/auth.json
+**/npm-debug.log
+**/yarn-error.log
+**/public/build
+
+# Vue.js / Frontend
+**/dist
+**/dist-ssr
+**/*.local
+**/.DS_Store
+
+# Docker
+docker-compose.override.yml
+
+# Database
+**/*.sqlite
+**/*.sqlite-journal
+**/*.sqlite*
+
+# Logs
+**/*.log
+**/logs/
+**/pnpm-debug.log*
+**/lerna-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+**/*.suo
+**/*.ntvs*
+**/*.njsproj
+**/*.sln
+
+# IDE
+**/.idea/
+**/.vscode/
+**/.fleet/
+**/*.swp
+**/*.swo
+**/*.sw?
+
+# AWS
+.aws-sam/
+samconfig.toml
+
+# Laravel Storage (keep directory structure, ignore contents)
+**/storage/app/*
+!**/storage/app/.gitignore
+!**/storage/app/public/
+**/storage/app/public/*
+!**/storage/app/public/.gitignore
+
+**/storage/framework/cache/*
+!**/storage/framework/cache/.gitignore
+**/storage/framework/cache/data/*
+!**/storage/framework/cache/data/.gitignore
+**/storage/framework/sessions/*
+!**/storage/framework/sessions/.gitignore
+**/storage/framework/testing/*
+!**/storage/framework/testing/.gitignore
+**/storage/framework/views/*
+!**/storage/framework/views/.gitignore
+
+**/bootstrap/cache/*
+!**/bootstrap/cache/.gitignore

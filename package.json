@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-microservices",
+  "version": "1.0.0",
+  "description": "E-Commerce Microservices System",
+  "scripts": {
+    "install:all": "concurrently -n \"CATALOG,CHECKOUT,EMAIL,FRONTEND\" -c \"blue,green,yellow,magenta\" \"npm:install:catalog\" \"npm:install:checkout\" \"npm:install:email\" \"npm:install:frontend\"",
+    "install:catalog": "cd catalog-service && composer install",
+    "install:checkout": "cd checkout-service && composer install",
+    "install:email": "cd email-service && composer install",
+    "install:frontend": "cd frontend && npm install",
+    "start": "concurrently -n \"CATALOG,CHECKOUT,EMAIL,FRONTEND\" -c \"blue,green,yellow,magenta\" \"npm:start:catalog\" \"npm:start:checkout\" \"npm:start:email\" \"npm:start:frontend\"",
+    "start:catalog": "cd catalog-service && php artisan serve --port=8001",
+    "start:checkout": "cd checkout-service && php artisan serve --port=8002",
+    "start:email": "cd email-service && php artisan serve --port=8003",
+    "start:frontend": "cd frontend && npm run dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
