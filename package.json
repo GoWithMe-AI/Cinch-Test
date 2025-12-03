@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "E-Commerce Microservices System",
   "scripts": {
-    "install:all": "concurrently -n \"CATALOG,CHECKOUT,EMAIL,FRONTEND\" -c \"blue,green,yellow,magenta\" \"npm:install:catalog\" \"npm:install:checkout\" \"npm:install:email\" \"npm:install:frontend\"",
+    "install:all": "npm install && concurrently -n \"CATALOG,CHECKOUT,EMAIL,FRONTEND\" -c \"blue,green,yellow,magenta\" \"npm:install:catalog\" \"npm:install:checkout\" \"npm:install:email\" \"npm:install:frontend\"",
     "install:catalog": "cd catalog-service && composer install",
     "install:checkout": "cd checkout-service && composer install",
     "install:email": "cd email-service && composer install",

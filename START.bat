@@ -5,4 +5,3 @@ echo.
 REM Start all services using concurrently
 call npm start
 
-pause
