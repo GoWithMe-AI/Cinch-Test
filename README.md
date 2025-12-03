@@ -1,116 +1,160 @@
-# E-Commerce Microservices System
+# 🛍️ E-Commerce Microservices System
 
 PHP/Laravel microservices with Vue.js frontend.
 
-## Prerequisites
+## 📋 Architecture
 
-- PHP 8.1+
-- Composer
-- MySQL
-- Node.js 16+
+| Service | Port | Description |
+|---------|------|-------------|
+| Catalog Service | 8001 | Product catalog |
+| Checkout Service | 8002 | Order processing |
+| Email Service | 8003 | Email notifications |
+| Frontend | 5173 | Vue.js application |
 
-## Database Setup
+## 📦 Prerequisites
+
+- PHP 8.1+, Composer, MySQL, Node.js 16+
+
+## 🚀 Quick Start
+
+### Using Batch Files (Windows)
 
 ```bash
-# Create database
+SETUP.bat    # One-time setup
+START.bat    # Start all services (use Ctrl+C to stop)
+```
+
+### Using Commands
+
+**1. Create Database**
+```bash
 mysql -u root -e "CREATE DATABASE IF NOT EXISTS ecommerce_db;"
 ```
 
-## Configuration
-
-Copy `.env.example` to `.env` in each service directory and update database credentials:
-
-```bash
-# Catalog Service
-cp catalog-service/.env.example catalog-service/.env
-
-# Checkout Service
-cp checkout-service/.env.example checkout-service/.env
-
-# Email Service
-cp email-service/.env.example email-service/.env
-```
-
-Update database credentials in each `.env` file:
-- `DB_DATABASE=ecommerce_db`
-- `DB_USERNAME=root`
-- `DB_PASSWORD=` (or your MySQL password)
-
-For checkout-service, also add:
-- `CATALOG_SERVICE_URL=http://localhost:8001`
-- `EMAIL_SERVICE_URL=http://localhost:8003`
-
-## Install Dependencies
-
-Install all dependencies (Composer for Laravel services + npm for frontend):
-
+**2. Install Dependencies**
 ```bash
 npm run install:all
 ```
 
-Or install individually:
+**3. Setup Services**
 ```bash
-# Laravel services
-cd catalog-service && composer install
-cd checkout-service && composer install
-cd email-service && composer install
+# Copy .env files
+cp catalog-service/.env.example catalog-service/.env
+cp checkout-service/.env.example checkout-service/.env
+cp email-service/.env.example email-service/.env
 
-# Frontend
-cd frontend && npm install
+# Update database credentials in each .env file
+# For checkout-service, add:
+# CATALOG_SERVICE_URL=http://127.0.0.1:8001
+# EMAIL_SERVICE_URL=http://127.0.0.1:8003
+
+# Generate keys and migrate
+cd catalog-service && php artisan key:generate && php artisan migrate && php artisan db:seed
+cd ../checkout-service && php artisan key:generate && php artisan migrate
+cd ../email-service && php artisan key:generate
 ```
 
-## Setup Services
-
-After installing dependencies, setup each service:
-
-```bash
-# Catalog Service
-cd catalog-service
-php artisan key:generate
-php artisan migrate
-php artisan db:seed
-
-# Checkout Service
-cd checkout-service
-php artisan key:generate
-php artisan migrate
-
-# Email Service
-cd email-service
-php artisan key:generate
-```
-
-## Run Services
-
-Start all services in one terminal:
-
+**4. Start All Services**
 ```bash
 npm start
-```
-
-Or use the batch file:
-```bash
+# or
 START.bat
 ```
 
-This starts all services in one terminal with colored output:
-- Catalog Service (Port 8001)
-- Checkout Service (Port 8002)
-- Email Service (Port 8003)
-- Frontend (Port 5173)
+## ▶️ Run Services Individually
 
-All services auto-reload when files are updated.
+```bash
+# Catalog Service
+cd catalog-service && php artisan serve --port=8001
 
-## Access
+# Checkout Service
+cd checkout-service && php artisan serve --port=8002
+
+# Email Service
+cd email-service && php artisan serve --port=8003
+
+# Frontend
+cd frontend && npm run dev
+```
+
+## 🌐 Access
 
 - Frontend: http://localhost:5173
 - Catalog API: http://localhost:8001/api/products
 - Checkout API: http://localhost:8002/api/orders
 - Email API: http://localhost:8003/api/send-order-email
 
-## Database Tables
+## 🔌 API Endpoints
 
-- `migrations` - Laravel migration tracking
-- `products` - Product catalog (Catalog Service)
-- `orders` - Order records (Checkout Service)
-- `order_items` - Order line items (Checkout Service)
+**Catalog Service**
+```
+GET  /api/products          - List products
+GET  /api/products/{id}    - Get product details
+```
+
+**Checkout Service**
+```
+POST /api/orders            - Create order
+Body: { "user_email": "...", "items": [{ "product_id": 1, "quantity": 2 }] }
+```
+
+**Email Service**
+```
+POST /api/send-order-email  - Send order email
+```
+
+## 🗄️ Database
+
+**Tables:**
+- `migrations` - Laravel tracking
+- `products` - Product catalog
+- `orders` - Order records
+- `order_items` - Order line items
+
+**Relationships:**
+- `order_items.order_id` → `orders.id` (Foreign Key with CASCADE delete)
+- One order has many order items
+
+## 📁 Project Structure
+
+```
+Cinch-Test/
+├── catalog-service/     # Product catalog
+├── checkout-service/    # Order processing
+├── email-service/       # Email notifications
+├── frontend/            # Vue.js app
+├── SETUP.bat           # Initial setup
+└── START.bat            # Start all services
+```
+
+## 🔄 Workflow
+
+1. Browse products → Catalog Service
+2. Add to cart → localStorage
+3. Place order → Checkout Service
+4. Order processing → Checkout fetches prices from Catalog, creates order, calls Email Service
+5. Email confirmation → Email Service sends summary
+
+## 🛠️ Troubleshooting
+
+**Port in use:**
+```bash
+# Stop services with Ctrl+C, or manually:
+taskkill /F /IM php.exe
+taskkill /F /IM node.exe
+```
+
+**Service connection issues:**
+- Ensure all services are running
+- Use `127.0.0.1` instead of `localhost` in `.env`
+- Check service URLs in `checkout-service/.env`
+
+**Email Testing (Local):**
+Emails are logged to file instead of sent. Check after placing order:
+```
+email-service/storage/logs/laravel.log
+```
+
+Email content appears in the log file. For production, change `MAIL_MAILER=log` to `MAIL_MAILER=smtp` in `email-service/.env`.
+
+**Auto-reload:** Services reload automatically on file changes.
