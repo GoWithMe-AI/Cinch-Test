@@ -1,7 +1,53 @@
 @echo off
 echo Setting up services...
 echo.
-echo Make sure you have copied .env.example to .env in each service directory!
+
+REM Check and create .env files from .env.example for each service
+echo Checking .env files...
+echo.
+
+REM Catalog Service
+if not exist "catalog-service\.env" (
+    echo Creating .env file for catalog-service...
+    if exist "catalog-service\.env.example" (
+        copy "catalog-service\.env.example" "catalog-service\.env" >nul
+        echo   - Created catalog-service\.env from .env.example
+    ) else (
+        echo   - Warning: .env.example not found in catalog-service, creating empty .env
+        type nul > "catalog-service\.env"
+    )
+) else (
+    echo   - catalog-service\.env already exists, skipping...
+)
+
+REM Checkout Service
+if not exist "checkout-service\.env" (
+    echo Creating .env file for checkout-service...
+    if exist "checkout-service\.env.example" (
+        copy "checkout-service\.env.example" "checkout-service\.env" >nul
+        echo   - Created checkout-service\.env from .env.example
+    ) else (
+        echo   - Warning: .env.example not found in checkout-service, creating empty .env
+        type nul > "checkout-service\.env"
+    )
+) else (
+    echo   - checkout-service\.env already exists, skipping...
+)
+
+REM Email Service
+if not exist "email-service\.env" (
+    echo Creating .env file for email-service...
+    if exist "email-service\.env.example" (
+        copy "email-service\.env.example" "email-service\.env" >nul
+        echo   - Created email-service\.env from .env.example
+    ) else (
+        echo   - Warning: .env.example not found in email-service, creating empty .env
+        type nul > "email-service\.env"
+    )
+) else (
+    echo   - email-service\.env already exists, skipping...
+)
+
 echo.
 
 REM Create bootstrap/cache directories for Laravel services
